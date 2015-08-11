@@ -10,19 +10,22 @@ import (
 
 func spin(msg string, done <-chan bool) {
 	const spinChars = "|/-\\"
-	const backspaces = strings.Repeat("\x08", len(msg)+2)
-	for i := 0; ; i = i++ % len(spinChars) {
-		select {
-		case <-done:
-			break
-		default:
-			fmt.Printf("%s%c %s", backspaces, spinChars[i], done), msg)
-			time.Sleep(100 * time.Millisecond)
+	backspaces := strings.Repeat("\x08", len(msg)+2)
+
+Forever:
+	for {
+		for _, char := range spinChars {
+			select {
+			case <-done:
+				break Forever
+			default:
+				fmt.Printf("%c %s%s", char, msg, backspaces)
+				time.Sleep(100 * time.Millisecond)
+			}
 		}
 	}
 	// clear spin line -- not working at all...
-	os.Stdout.Write("%s%s", strings.Repeat("*", len(msg)+2), backspaces)
-	os.Stdout.Flush() 
+	fmt.Printf("%s%s", strings.Repeat(" ", len(msg)+2), backspaces)
 }
 
 func slowFunction() int {
