@@ -1,2 +1,2 @@
 # scraps
-Pequenos experimentos para rodar com go run
+Small experiments to try with `go run`
