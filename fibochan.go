@@ -8,6 +8,7 @@ import (
 )
 
 func fib(n int, results chan<- uint64) {
+	defer close(results)
 	a, b := uint64(0), uint64(1)
 	results <- a
 	for n > 0 {
@@ -18,7 +19,6 @@ func fib(n int, results chan<- uint64) {
 		results <- a
 		n--
 	}
-	close(results)
 }
 
 func parseArg() (n int) {
